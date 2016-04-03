@@ -4,6 +4,7 @@
  */
 public class Tweet {
     
+<<<<<<< HEAD
     private int tweetId;
     private int userId;
     private String phrase;
@@ -95,4 +96,7 @@ public class Tweet {
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
+=======
+    
+>>>>>>> refs/remotes/origin/master
 }
