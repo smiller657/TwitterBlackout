@@ -1,10 +1,12 @@
 
-/**
- *
- * @author Mike
- */
 import java.sql.*;
 
+/**
+ *  The Database class contains the scripts used to connect the TwitterBlackout 
+ *  program with the database.
+ * 
+ * @author mrey4_000
+ */
 public class Database {
 
     public static Connection getConnection() throws Exception {
@@ -17,10 +19,19 @@ public class Database {
     return c;
     }
 
-    public static void addUser(int uId, String fN, String lN, String h, String pw, int iP) throws Exception {
+    public static void addUser(User var) throws Exception {
         
-
-        
+        int uId = var.getUserId();
+        String fN = var.getFirstName();
+        String lN = var.getLastName();
+        String h = var.getHandle();
+        String pw = var.getPassword();
+        boolean iiP = var.getIsPublic();
+        int iP;
+        if (iiP) 
+            iP = 1;
+        else
+            iP = 0;
         
         Connection c = null;
         PreparedStatement posted = null;

@@ -11,6 +11,7 @@ public class TwitterBlackoutTester {
      */
     public static void main(String[] args) throws Exception {
         User sm = new User(0, "Sam", "Miller", "swordgirl", "password", true);
+        User mr = new User(1, "Mike", "Reynolds", "mrmr", "1234", true);
         /* Tweet sm1 = new Tweet(0, 0, "sam's tweet 1", true, "160101");
         Tweet sm2 = new Tweet(1, 0, "sam's tweet 2", true, "160102");
         Tweets tweets = new Tweets();
@@ -27,7 +28,7 @@ public class TwitterBlackoutTester {
         } */
         
         // test insert into user table
-        int uId = sm.getUserId();
+        /* int uId = sm.getUserId();
         String fN = sm.getFirstName();
         String lN = sm.getLastName();
         String h = sm.getHandle();
@@ -37,9 +38,10 @@ public class TwitterBlackoutTester {
         if (iiP) 
             iP = 1;
         else
-            iP = 0;
+            iP = 0; */
+        User var = mr;
             
-        Database.addUser(uId, fN, lN, h, pw, iP);
+        Database.addUser(var);
         
         
     }
