@@ -58,8 +58,8 @@ public class TwitterBlackoutTester {
             iP = 1;
         else
             iP = 0; */
-        User var = mr;
-        Database.addUser(var);
+        //User var = mr;
+        //Database.addUser(var);
     }
     
 }
