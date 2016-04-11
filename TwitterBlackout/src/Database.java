@@ -177,7 +177,7 @@ public class Database {
             }
             
             for (int i = 0; i < tweets.size(); i++) {
-                System.out.println(((Tweet)tweets.get(i)).getTweetId() + ", " + ((Tweet)tweets.get(i)).getUserId() + ", " + ((Tweet)tweets.get(i)).getPhrase() + "' " + ((Tweet)tweets.get(i)).getIsPublic() + "' " + ((Tweet)tweets.get(i)).getTimestamp());
+                System.out.println(((Tweet)tweets.get(i)).getTweetId() + ", " + ((Tweet)tweets.get(i)).getUserId() + ", " + ((Tweet)tweets.get(i)).getPhrase() + ", " + ((Tweet)tweets.get(i)).getIsPublic() + ", " + ((Tweet)tweets.get(i)).getTimestamp());
             }
 
             st.close();

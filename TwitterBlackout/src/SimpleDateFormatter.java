@@ -1,13 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 /**
  *
  * @author Samantha
  */
 class SimpleDateFormatter {
     
+  public static String getTimestamp() {
+      LocalTime tStamp = LocalTime.now();
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+      String timestamp = tStamp.format(formatter);
+      return timestamp;
+  }  
 }

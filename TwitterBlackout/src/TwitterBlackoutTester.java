@@ -67,7 +67,8 @@ public class TwitterBlackoutTester {
         //Database.addUser(var);
             
        //Database.addUser(var);
-        Tweet m1 = new Tweet(2, 1, "hello", false, "173905");
+        String timestamp = SimpleDateFormatter.getTimestamp();
+        Tweet m1 = new Tweet(3, 1, "check timestamp", true, timestamp);
         Tweet var = m1;
 //        
         Database.addTweet(var);
