@@ -89,7 +89,12 @@ public class Database {
         PreparedStatement posted = null;
         try {
             c = getConnection();
-            posted = c.prepareStatement("INSERT INTO tweet (tweetId, userId, phrase, isPublic, timestamp) VALUES ('" + tId + "','" + uId + "','" + ph + "', '" + iP + "', '" + ts + "')");
+            posted = c.prepareStatement("INSERT INTO tweet (tweetId, userId, phrase, isPublic, timestamp) VALUES (?, ?, ?, ?, ?)");
+            posted.setInt(1, tId);
+            posted.setInt(2, uId);
+            posted.setString(3, ph);
+            posted.setInt(4, iP);
+            posted.setString(5, ts);
             posted.executeUpdate();
         } catch (Exception e) {
             System.out.println(e);
