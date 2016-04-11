@@ -123,6 +123,7 @@ public class TwitterBlackout {
                 }
 
             } else if (input.equals("search")) { //searches for a substring within the available tweets
+                System.out.print("Type a phrase to search: ");
 
             } else if (input.equals("hashtag")) { //on click of a hashtag, display all tweets with that hashtag
 
