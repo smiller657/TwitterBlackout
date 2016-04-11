@@ -10,7 +10,7 @@ public class TwitterBlackoutTester {
     /**
      * @param args the command line arguments
      */
-<<<<<<< HEAD
+
     public static void main(String[] args) {
         ArrayList<User> users = new ArrayList<User>();
         ArrayList<Tweet> tweets = new ArrayList<Tweet>();
@@ -25,13 +25,10 @@ public class TwitterBlackoutTester {
         users.add(pk);
         Tweet sm1 = new Tweet(0, 0, "sam's tweet 1", true, "160101");
         Tweet sm2 = new Tweet(1, 0, "sam's tweet 2", true, "160102");
-=======
-    public static void main(String[] args) throws Exception {
         //User sm = new User(0, "Sam", "Miller", "swordgirl", "password", true);
         //User mr = new User(1, "Mike", "Reynolds", "mrmr", "1234", true);
         Tweet sm1 = new Tweet(0, 0, "sams tweet 1", true, "160101");
         /*Tweet sm2 = new Tweet(1, 0, "sam's tweet 2", true, "160102");
->>>>>>> refs/remotes/origin/master
         Tweets tweets = new Tweets();
         tweets.addTweet(sm1);
         tweets.addTweet(sm2); 
@@ -67,17 +64,13 @@ public class TwitterBlackoutTester {
         else
             iP = 0; */
         //User var = mr;
-<<<<<<< HEAD
         //Database.addUser(var);
-=======
             
        //Database.addUser(var);
         
-        Tweet var = sm1;
-        
-        Database.addTweet(var);
-        
->>>>>>> refs/remotes/origin/master
+//        Tweet var = sm1;
+//        
+//        Database.addTweet(var);
     }
     
 }
