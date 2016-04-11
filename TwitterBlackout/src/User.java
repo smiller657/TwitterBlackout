@@ -48,6 +48,7 @@ public class User {
     public String getLastName() {
         return lastName;
     }
+    
     /**
      * Getter for a user's handle.
      * @return The string of a user's handle.
@@ -110,5 +111,9 @@ public class User {
      */
     public void setIsPublic(boolean isPublic) {
         this.isPublic = isPublic;
+    }
+    
+    public String toString() {
+        return userId + " " + firstName + " " + lastName + " " + handle + " " + password + " " + isPublic;
     }
 }
