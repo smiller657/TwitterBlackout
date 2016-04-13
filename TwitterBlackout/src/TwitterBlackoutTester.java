@@ -11,11 +11,10 @@ public class TwitterBlackoutTester {
      * @param args the command line arguments
      */
 
-    public static void main(String[] args) {
-        ArrayList<User> users = new ArrayList<User>();
+    public static void main(String[] args) throws Exception {
+       /* ArrayList<User> users = new ArrayList<User>();
         ArrayList<Tweet> tweets = new ArrayList<Tweet>();
-        ArrayList<Subscription> subs = new ArrayList<Subscription>();
-        ArrayList<Hashtag> hashtags = new ArrayList<Hashtag>();
+        ist<Hashtag> hashtags = new ArrayList<Hashtag>();
         User sm = new User(0, "Sam", "Miller", "swordgirl", "password", true);
         User pk = new User(1, "Paul", "Kartage", "rennman", "pass2", false);
         User mr = new User(2, "Mike", "Reynolds", "mrmr", "1234", true);
@@ -26,6 +25,13 @@ public class TwitterBlackoutTester {
         users.add(mr);
         Tweet sm1 = new Tweet(0, 0, "sam's tweet 1", true, "160101");
         Tweet sm2 = new Tweet(1, 0, "sam's tweet 2", true, "160102");
+        //User sm = new User(0, "Sam", "Miller", "swordgirl", "password", true);
+        //User mr = new User(1, "Mike", "Reynolds", "mrmr", "1234", true);
+        Tweet sm1 = new Tweet(0, 0, "sams tweet 1", true, "160101");
+        Tweet sm2 = new Tweet(1, 0, "sam's tweet 2", true, "160102");
+        Tweets tweets = new Tweets();
+        tweets.addTweet(sm1);
+        tweets.addTweet(sm2); 
         tweets.add(sm1);
         tweets.add(sm2);
         Tweet pk1 = new Tweet(2, 1, "Paul's private tweet #1", false, "160302");
@@ -67,10 +73,14 @@ public class TwitterBlackoutTester {
         //Database.addUser(var);
             
        //Database.addUser(var);
-        
-//        Tweet var = sm1;
+        String timestamp = SimpleDateFormatter.getTimestamp();
+        Tweet m1 = new Tweet(4, 1, "Mike's apostrphe check", true, timestamp);
+        Tweet var = m1;
 //        
-//        Database.addTweet(var);
+        Database.addTweet(var);
+        
+        Database.getTweets();
+        
     }
     
 }
