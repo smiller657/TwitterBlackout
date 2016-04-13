@@ -123,7 +123,24 @@ public class TwitterBlackout {
                 }
 
             } else if (input.equals("search")) { //searches for a substring within the available tweets
-                System.out.print("Type a phrase to search: ");
+                System.out.print("Type a hashtag or phrase to search: ");
+                in.nextLine();
+                String phrase = in.nextLine();
+                boolean isFound = false;
+                for (Tweet tweet: tweets) {
+                    if (tweet.getPhrase().contains(phrase)) {
+                        if (tweet.getIsPublic()) {
+                            System.out.println(hashtagLookup(tweet.getUserId()) + " " + tweet.getPhrase());
+                            isFound = true;                            
+                        } else if ((currentUser != null) && (isSubscribed(tweet.getUserId()) || tweet.getPhrase().contains("@" + currentUser.getHandle()))) {
+                            System.out.println(hashtagLookup(tweet.getUserId()) + " " + tweet.getPhrase());
+                            isFound = true;
+                        }
+                    }
+                }
+                if (!isFound) {
+                    System.out.println("No results.");
+                }
 
             } else if (input.equals("hashtag")) { //on click of a hashtag, display all tweets with that hashtag
 
@@ -143,12 +160,7 @@ public class TwitterBlackout {
             if (tweet.getIsPublic()) {
                 int tweeterId = tweet.getUserId();
                 String handle = "";
-                for (User user : users) { //get the handle of the user
-                    if (user.getUserId() == tweeterId) {
-                        handle = user.getHandle();
-                    }
-                }
-                System.out.println(handle + " " + tweet.getPhrase());
+                System.out.println(hashtagLookup(tweet.getUserId()) + " " + tweet.getPhrase());
             }
         }
     }
@@ -162,23 +174,48 @@ public class TwitterBlackout {
             for (Tweet tweet : tweets) {
                 if (tweet.getUserId() == currentUser.getUserId()) { //grab tweets this own user posts
                     System.out.println(currentUser.getHandle() + " " + tweet.getPhrase());
+                } else if (tweet.getPhrase().contains("@" + currentUser.getHandle())) {//look for messages to the user, regardless of public/private
+                    int tweeterId = tweet.getUserId();
+                    String handle = "";
+                    System.out.println(hashtagLookup(tweet.getUserId()) + " " + tweet.getPhrase());
                 } else if (!tweet.getIsPublic()) { //look for tweets that another user has post to whom this user subscribes.
                     int tweeterId = tweet.getUserId();
                     String handle = "";
                     for (Subscription sub : subs) {
                         if (sub.getSubscriberId() == tweeterId && sub.getSubscribeeId() == userId) {
-                            for (User user : users) { //get the handle of the user
-                                if (user.getUserId() == tweeterId) {
-                                    handle = user.getHandle();
-                                    System.out.println(handle + " " + tweet.getPhrase());
-                                }
-                            }
+                            System.out.println(hashtagLookup(tweet.getUserId()) + " " + tweet.getPhrase());
                         }
                     }
                 }
             }
         }
-
     }
-
+    /**
+     * Searches through the available users given a userId.
+     * @param userId A user's userId number.
+     * @return Their hashtag identifier.
+     */
+    private String hashtagLookup(int userId) {
+        String handle = "";
+        for (User user : users) { //get the handle of the user
+            if (user.getUserId() == userId) {
+                handle = user.getHandle();
+            }
+        }
+        return handle;
+    }
+    /**
+     * Checks to see if the current user is subscribed to a tweet in question.
+     * @param tweeterId The userId of the person tweeting a post.
+     * @return True if the user subscribes to a given user.
+     */
+    private boolean isSubscribed(int tweeterId) {
+        boolean isSubscribed = false;
+        for (Subscription sub : subs) { //get the handle of the user
+            if (sub.getSubscriberId() == currentUser.getUserId() && sub.getSubscribeeId() == tweeterId) {
+                isSubscribed = true;
+            }
+        }
+        return isSubscribed;
+    }
 }
