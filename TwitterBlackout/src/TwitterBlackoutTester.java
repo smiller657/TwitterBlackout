@@ -12,22 +12,17 @@ public class TwitterBlackoutTester {
      */
 
     public static void main(String[] args) throws Exception {
-       /* ArrayList<User> users = new ArrayList<User>();
+       /*ArrayList<User> users = new ArrayList<User>();
         ArrayList<Tweet> tweets = new ArrayList<Tweet>();
         ist<Hashtag> hashtags = new ArrayList<Hashtag>();
         User sm = new User(0, "Sam", "Miller", "swordgirl", "password", true);
         User pk = new User(1, "Paul", "Kartage", "rennman", "pass2", false);
         User mr = new User(2, "Mike", "Reynolds", "mrmr", "1234", true);
-        /* Testing code tools before db implementation: */
-        
+        /* Testing code tools before db implementation: 
         users.add(sm);
         users.add(pk);
         users.add(mr);
         Tweet sm1 = new Tweet(0, 0, "sam's tweet 1", true, "160101");
-        Tweet sm2 = new Tweet(1, 0, "sam's tweet 2", true, "160102");
-        //User sm = new User(0, "Sam", "Miller", "swordgirl", "password", true);
-        //User mr = new User(1, "Mike", "Reynolds", "mrmr", "1234", true);
-        Tweet sm1 = new Tweet(0, 0, "sams tweet 1", true, "160101");
         Tweet sm2 = new Tweet(1, 0, "sam's tweet 2", true, "160102");
         Tweets tweets = new Tweets();
         tweets.addTweet(sm1);
