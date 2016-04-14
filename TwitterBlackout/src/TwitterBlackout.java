@@ -21,6 +21,13 @@ public class TwitterBlackout {
     private int userAccountCounter = 2;
     private int tweetAccountCounter = 4;
 
+    /**
+     * Runs the Twitter Blackout Application, which interfaces the GUI and Database to display a newsfeed and user options.
+     * @param tweets An arraylist of tweets, or messages, pulled from the database.
+     * @param users An arraylist of users pulled from the database.
+     * @param subscriptions An arraylist of subscriptions, which join when a user follows another user, pulled from the database.
+     * @param hashtags An arraylist of tweets, organized by hashtag, pulled from the database.
+     */
     public void runApp(ArrayList<Tweet> tweets, ArrayList<User> users, ArrayList<Subscription> subscriptions, ArrayList<Hashtag> hashtags) {
 
         //Generate arraylists from database?  Not sure if should be parameters.
