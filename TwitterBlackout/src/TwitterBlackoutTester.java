@@ -63,12 +63,13 @@ public class TwitterBlackoutTester {
             iP = 1;
         else
             iP = 0; */
+        // mr = new User(0, "Mike", "Reynolds", "mrmr", "1234", true);
         //User var = mr;
         //Database.addUser(var);
             
        //Database.addUser(var);
         String timestamp = SimpleDateFormatter.getTimestamp();
-        Tweet m1 = new Tweet(4, 1, "Mike's apostrphe check", true, timestamp);
+        Tweet m1 = new Tweet(0, 1, "an additional timestamp check", true, timestamp);
         Tweet var = m1;
 //        
         Database.addTweet(var);
