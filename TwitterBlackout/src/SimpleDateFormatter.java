@@ -8,8 +8,8 @@ import java.time.format.DateTimeFormatter;
 class SimpleDateFormatter {
     
   public static String getTimestamp() {
-      LocalTime tStamp = LocalTime.now();
-      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+      LocalDateTime tStamp = LocalDateTime.now();
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
       String timestamp = tStamp.format(formatter);
       return timestamp;
   }  
