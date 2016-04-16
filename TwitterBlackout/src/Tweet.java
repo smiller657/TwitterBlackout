@@ -2,7 +2,7 @@
  * The Tweet class contains a constructor, getters, and setters for an individual Tweet.
  * @author Samantha
  */
-public class Tweet {
+public class Tweet implements Cloneable {
     
     private int tweetId;
     private int userId;
@@ -94,5 +94,16 @@ public class Tweet {
      */
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
+    }
+    /**
+     * Clones a tweet for the displayMesage() in TwitterBlackout.
+     * Clone borrowed from http://howtodoinjava.com/core-java/cloning/a-guide-to-object-cloning-in-java/
+     * 
+     * @return a clone of a tweet so the original object does change.
+     * @throws CloneNotSupportedException 
+     */
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

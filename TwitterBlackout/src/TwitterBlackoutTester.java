@@ -13,7 +13,7 @@ public class TwitterBlackoutTester {
      * Tests TwitterBlackout logic.
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CloneNotSupportedException {
         ArrayList<User> users = new ArrayList<User>();
          ArrayList<Tweet> tweets = new ArrayList<Tweet>();
          ArrayList<Hashtag> hashtags = new ArrayList<Hashtag>();
@@ -26,14 +26,15 @@ public class TwitterBlackoutTester {
          users.add(mr);
          Tweet sm1 = new Tweet(0, 0, "sam's tweet 1", true, "160101");
          Tweet sm2 = new Tweet(1, 0, "sam's tweet 2", true, "160102");
-         
+         Tweet sm3 = new Tweet(2, 0, "Sam to Mike @2 backatcha.", true, "160102");
          tweets.add(sm1);
          tweets.add(sm2);
+         tweets.add(sm3);
          Tweet pk1 = new Tweet(2, 1, "Paul's private tweet #1", false, "160302");
          Tweet pk2 = new Tweet(3, 1, "Paul's public tweet #2", true, "160202");
          tweets.add(pk1);
          tweets.add(pk2);
-         Tweet mr1 = new Tweet(4, 2, "Mike @swordgirl hi", false, "160202");
+         Tweet mr1 = new Tweet(4, 2, "Mike @0 hi", false, "160202");
          tweets.add(mr1);
          Subscription sub1 = new Subscription(100, 1, 0);  //Paul is the subscriber, sam is the subscribee.
          subs.add(sub1);

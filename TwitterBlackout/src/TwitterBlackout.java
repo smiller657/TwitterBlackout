@@ -22,13 +22,19 @@ public class TwitterBlackout {
     private int tweetAccountCounter = 4;
 
     /**
-     * Runs the Twitter Blackout Application, which interfaces the GUI and Database to display a newsfeed and user options.
-     * @param tweets An arraylist of tweets, or messages, pulled from the database.
+     * Runs the Twitter Blackout Application, which interfaces the GUI and
+     * Database to display a newsfeed and user options.
+     *
+     * @param tweets An arraylist of tweets, or messages, pulled from the
+     * database.
      * @param users An arraylist of users pulled from the database.
-     * @param subscriptions An arraylist of subscriptions, which join when a user follows another user, pulled from the database.
-     * @param hashtags An arraylist of tweets, organized by hashtag, pulled from the database.
+     * @param subscriptions An arraylist of subscriptions, which join when a
+     * user follows another user, pulled from the database.
+     * @param hashtags An arraylist of tweets, organized by hashtag, pulled from
+     * the database.
+     * @throws java.lang.CloneNotSupportedException
      */
-    public void runApp(ArrayList<Tweet> tweets, ArrayList<User> users, ArrayList<Subscription> subscriptions, ArrayList<Hashtag> hashtags) {
+    public void runApp(ArrayList<Tweet> tweets, ArrayList<User> users, ArrayList<Subscription> subscriptions, ArrayList<Hashtag> hashtags) throws CloneNotSupportedException {
 
         //Generate arraylists from database?  Not sure if should be parameters.
         this.tweets = tweets;
@@ -119,10 +125,19 @@ public class TwitterBlackout {
                     }
                     System.out.print("Type true if this tweet is public, otherwise type false: ");
                     boolean isPublic = in.nextBoolean();
+                    for (int i = 0; i < phrase.length(); i++) {
+                        if (phrase.charAt(i) == '@') {
+                            int endHandle = phrase.indexOf(" ", i);
+                            String handle = phrase.substring((i + 1), endHandle);
+                            for (User user : users) {
+                                if (user.getHandle().equals(handle)) {
+                                    phrase = phrase.substring(0, i) + user.getUserId() + phrase.substring(endHandle);
+                                }
+                            }
+                        }
+                    }
                     //TODO: Remove if db generated
-                    Date dNow = new Date();
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyymmdd");
-                    Tweet newTweet = new Tweet(tweetAccountCounter, currentUser.getUserId(), phrase, isPublic, sdf.format(dNow));
+                    Tweet newTweet = new Tweet(tweetAccountCounter, currentUser.getUserId(), phrase, isPublic, SimpleDateFormatter.getTimestamp());
                     tweets.add(newTweet);
                     displayPrivateTweets();
                 } else {
@@ -134,13 +149,17 @@ public class TwitterBlackout {
                 in.nextLine();
                 String phrase = in.nextLine();
                 boolean isFound = false;
-                for (Tweet tweet: tweets) {
-                    if (tweet.getPhrase().contains(phrase)) {
-                        if (tweet.getIsPublic()) {
-                            System.out.println(hashtagLookup(tweet.getUserId()) + " " + tweet.getPhrase());
-                            isFound = true;                            
-                        } else if ((currentUser != null) && (isSubscribed(tweet.getUserId()) || tweet.getPhrase().contains("@" + currentUser.getHandle()))) {
-                            System.out.println(hashtagLookup(tweet.getUserId()) + " " + tweet.getPhrase());
+                for (Tweet tweet : tweets) {
+                    Tweet tempTweet = displayMessage(tweet);
+                    if (tempTweet.getPhrase().contains(phrase)) {
+                        if ((currentUser != null) && tempTweet.getPhrase().contains("@" + currentUser.getHandle())) {
+                            System.out.println(hashtagLookup(tempTweet.getUserId()) + " " + tempTweet.getPhrase() + " " + tweet.getTimestamp());
+                            isFound = true;
+                        } else if (tempTweet.getIsPublic()) {
+                            System.out.println(hashtagLookup(tempTweet.getUserId()) + " " + tempTweet.getPhrase() + " " + tweet.getTimestamp());
+                            isFound = true;
+                        } else if ((currentUser != null) && (isSubscribed(tempTweet.getUserId()))) {
+                            System.out.println(hashtagLookup(tempTweet.getUserId()) + " " + tempTweet.getPhrase() + " " + tweet.getTimestamp());
                             isFound = true;
                         }
                     }
@@ -162,43 +181,52 @@ public class TwitterBlackout {
     /**
      * Prints the public tweets.
      */
-    private void displayPublicTweets() {
+    private void displayPublicTweets() throws CloneNotSupportedException {
         for (Tweet tweet : tweets) {
             if (tweet.getIsPublic()) {
-                int tweeterId = tweet.getUserId();
-                String handle = "";
-                System.out.println(hashtagLookup(tweet.getUserId()) + " " + tweet.getPhrase());
+                if (tweet.getPhrase().contains("@")) {
+                    Tweet tempTweet = displayMessage(tweet);
+                    System.out.println(hashtagLookup(tweet.getUserId()) + " " + tempTweet.getPhrase() + " " + tweet.getTimestamp());
+                } else {
+                    int tweeterId = tweet.getUserId();
+                    String handle = "";
+                    System.out.println(hashtagLookup(tweet.getUserId()) + " " + tweet.getPhrase() + " " + tweet.getTimestamp());
+                }
+
             }
         }
     }
 
     /**
      * Prints the subscribed only tweets.
+     *
+     * @throws CloneNotSupportedException
      */
-    private void displayPrivateTweets() {
+    private void displayPrivateTweets() throws CloneNotSupportedException {
         if (currentUser != null) {
             int userId = currentUser.getUserId();
             for (Tweet tweet : tweets) {
                 if (tweet.getUserId() == currentUser.getUserId()) { //grab tweets this own user posts
-                    System.out.println(currentUser.getHandle() + " " + tweet.getPhrase());
-                } else if (tweet.getPhrase().contains("@" + currentUser.getHandle())) {//look for messages to the user, regardless of public/private
-                    int tweeterId = tweet.getUserId();
-                    String handle = "";
-                    System.out.println(hashtagLookup(tweet.getUserId()) + " " + tweet.getPhrase());
+                    Tweet tempTweet = displayMessage(tweet);
+                    System.out.println(hashtagLookup(tweet.getUserId()) + " " + tempTweet.getPhrase() + " " + tweet.getTimestamp() + " " + tweet.getTimestamp());
+                } else if (tweet.getPhrase().contains("@" + currentUser.getUserId())) {//look for messages to the user, regardless of public/private
+                    Tweet tempTweet = displayMessage(tweet);
+                    System.out.println(hashtagLookup(tweet.getUserId()) + " " + tempTweet.getPhrase() + " " + tweet.getTimestamp() + " " + tweet.getTimestamp());
                 } else if (!tweet.getIsPublic()) { //look for tweets that another user has post to whom this user subscribes.
                     int tweeterId = tweet.getUserId();
-                    String handle = "";
                     for (Subscription sub : subs) {
                         if (sub.getSubscriberId() == tweeterId && sub.getSubscribeeId() == userId) {
-                            System.out.println(hashtagLookup(tweet.getUserId()) + " " + tweet.getPhrase());
+                            System.out.println(hashtagLookup(tweet.getUserId()) + " " + tweet.getPhrase() + " " + tweet.getTimestamp() + " " + tweet.getTimestamp());
                         }
                     }
                 }
             }
         }
     }
+
     /**
      * Searches through the available users given a userId.
+     *
      * @param userId A user's userId number.
      * @return Their hashtag identifier.
      */
@@ -211,8 +239,10 @@ public class TwitterBlackout {
         }
         return handle;
     }
+
     /**
      * Checks to see if the current user is subscribed to a tweet in question.
+     *
      * @param tweeterId The userId of the person tweeting a post.
      * @return True if the user subscribes to a given user.
      */
@@ -224,5 +254,34 @@ public class TwitterBlackout {
             }
         }
         return isSubscribed;
+    }
+
+    /**
+     * Method checks every instance of a phrase of a tweet for the '@userId' and
+     * converts it to '@handle'
+     *
+     * @param tweet A tweet, with a '@'. Superfluous if no message notation in
+     * tweet.
+     * @return The tweet with a userIds swapped for handles. Recommend storing
+     * in a temp variable.
+     * @throws CloneNotSupportedException If the tweet is not cloneable.
+     */
+    private Tweet displayMessage(Tweet tweet) throws CloneNotSupportedException {
+        Tweet tempTweet = (Tweet) tweet.clone();
+        String phrase = tempTweet.getPhrase();
+        for (int i = 0; i < phrase.length(); i++) {
+            if (phrase.charAt(i) == '@') {
+                int endHandle = phrase.indexOf(" ", i);
+                String uid = phrase.substring((i + 1), endHandle);
+                int userId = Integer.parseInt(uid);
+                for (User user : users) {
+                    if (user.getUserId() == userId) {
+                        phrase = phrase.substring(0, i + 1) + user.getHandle() + phrase.substring(endHandle);
+                    }
+                }
+            }
+        }
+        tempTweet.setPhrase(phrase);
+        return tempTweet;
     }
 }
