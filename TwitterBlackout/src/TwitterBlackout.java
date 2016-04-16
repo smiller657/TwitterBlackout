@@ -39,6 +39,7 @@ public class TwitterBlackout {
         this.subs = subscriptions;
 
         //first display the newsfeed.  GUI methods to launch window?
+        
         //loop through the tweets to display the current tweets to the guest user
         displayPublicTweets();
         //News Feed Menu options
