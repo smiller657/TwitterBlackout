@@ -16,7 +16,6 @@ public class TwitterBlackoutTester {
     public static void main(String[] args) throws CloneNotSupportedException {
         ArrayList<User> users = new ArrayList<User>();
          ArrayList<Tweet> tweets = new ArrayList<Tweet>();
-         ArrayList<Hashtag> hashtags = new ArrayList<Hashtag>();
          ArrayList<Subscription> subs = new ArrayList<Subscription>();
          User sm = new User(0, "Sam", "Miller", "swordgirl", "password", true);
          User pk = new User(1, "Paul", "Kartage", "rennman", "pass2", false);
@@ -26,7 +25,7 @@ public class TwitterBlackoutTester {
          users.add(mr);
          Tweet sm1 = new Tweet(0, 0, "sam's tweet 1", true, "160101");
          Tweet sm2 = new Tweet(1, 0, "sam's tweet 2", true, "160102");
-         Tweet sm3 = new Tweet(2, 0, "Sam to Mike @2 backatcha.", true, "160102");
+         Tweet sm3 = new Tweet(2, 0, "Sam to Mike @2 backatcha @1.", true, "160102");
          tweets.add(sm1);
          tweets.add(sm2);
          tweets.add(sm3);
@@ -39,7 +38,7 @@ public class TwitterBlackoutTester {
          Subscription sub1 = new Subscription(100, 1, 0);  //Paul is the subscriber, sam is the subscribee.
          subs.add(sub1);
          TwitterBlackout tb = new TwitterBlackout();
-         tb.runApp(tweets, users, subs, hashtags);
+         tb.runApp(tweets, users, subs);
     }
     /**
      * Tests DB queries and scripts.
