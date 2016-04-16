@@ -131,7 +131,7 @@ public class Database {
 
     public static void getTweets() throws Exception {
 
-        ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+        //ArrayList<Tweet> tweets = new ArrayList<Tweet>();
 
         Connection c = null;
 
@@ -163,9 +163,9 @@ public class Database {
 
             }
             
-            for (int i = 0; i < tweets.size(); i++) {
-                System.out.println(((Tweet)tweets.get(i)).getTweetId() + ", " + ((Tweet)tweets.get(i)).getUserId() + ", " + ((Tweet)tweets.get(i)).getPhrase() + ", " + ((Tweet)tweets.get(i)).getIsPublic() + ", " + ((Tweet)tweets.get(i)).getTimestamp());
-            }
+            //for (int i = 0; i < tweets.size(); i++) {
+              //  System.out.println(((Tweet)tweets.get(i)).getTweetId() + ", " + ((Tweet)tweets.get(i)).getUserId() + ", " + ((Tweet)tweets.get(i)).getPhrase() + ", " + ((Tweet)tweets.get(i)).getIsPublic() + ", " + ((Tweet)tweets.get(i)).getTimestamp());
+            //}
 
             st.close();
         } catch (Exception e) {
@@ -173,4 +173,51 @@ public class Database {
         }
 
     }
+    
+    public static void getUser(ArrayList users) throws Exception {
+        
+        //ArrayList<User> users = new ArrayList<User>();
+        
+        Connection c = null;
+
+        try {
+            c = getConnection();
+
+            //  SELECT query
+            String query = "SELECT * from user";
+            Statement st = c.createStatement();
+            ResultSet result = st.executeQuery(query);
+
+            // iterate through the query
+            while (result.next()) {
+                int userId = result.getInt("userId");
+                String firstName = result.getString("firstName");
+                String lastName = result.getString("lastName");
+                String handle = result.getString("handle");
+                String password = result.getString("password");
+                boolean isPublic;
+                int ip = result.getInt("isPublic");
+                if (ip == 1) {
+                    isPublic = true;
+                } else {
+                    isPublic = false;
+                }
+
+                // add info to users arraylist
+                User u = new User(userId, firstName, lastName, handle, password, isPublic);
+                users.add(u);
+
+            }
+            
+            //for (int i = 0; i < users.size(); i++) {
+           //     System.out.println(((User)users.get(i)).getUserId() + ", " + ((User)users.get(i)).getFirstName() + ", " + ((User)users.get(i)).getLastName() + ", " + ((User)users.get(i)).getHandle() + ", " + ((User)users.get(i)).getPassword() + ", " + ((User)users.get(i)).getIsPublic());
+            //}
+
+            st.close();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+    
+    
 }

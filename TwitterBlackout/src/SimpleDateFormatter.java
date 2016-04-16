@@ -8,15 +8,11 @@ import java.time.format.DateTimeFormatter;
  * @author mrey4_000
  */
 class SimpleDateFormatter {
-
-    /**
-     * Instantiates a timestamp based on a pattern.
-     * @return The timestamp when called
-     */
-    public static String getTimestamp() {
-        LocalTime tStamp = LocalTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyymmdd HH:mm:ss");
-        String timestamp = tStamp.format(formatter);
-        return timestamp;
-    }
+    
+  public static String getTimestamp() {
+      LocalDateTime tStamp = LocalDateTime.now();
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+      String timestamp = tStamp.format(formatter);
+      return timestamp;
+  }  
 }
