@@ -1,9 +1,11 @@
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+
 /**
+ * Formats the date for timestamping a Tweet.
  *
- * @author Samantha
+ * @author mrey4_000
  */
 class SimpleDateFormatter {
     

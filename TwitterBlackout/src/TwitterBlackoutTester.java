@@ -3,11 +3,14 @@ import java.util.ArrayList;
 
 /**
  * Establishes a work space to test out various parts of the code.
+ * Comment out the one you don't want to use.
+ *
  * @author Samantha
  */
 public class TwitterBlackoutTester {
 
     /**
+     * Tests TwitterBlackout logic.
      * @param args the command line arguments
      */
 

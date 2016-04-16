@@ -129,25 +129,7 @@ public class Database {
         }
     }
 
-    public static void addHashtag(Hashtag var) throws Exception {
-
-        int hId = var.getHashtagId();
-        String ht = var.getHashtag();
-        int tId = var.getTweetId();
-        Connection c = null;
-        PreparedStatement posted = null;
-        try {
-            c = getConnection();
-            posted = c.prepareStatement("INSERT INTO hashtag (hashtagId, hashtag, tweetId) VALUES ('" + hId + "','" + ht + "', '" + tId + "')");
-            posted.executeUpdate();
-        } catch (Exception e) {
-            System.out.println(e);
-        } finally {
-            System.out.println("Insert Completed.");
-        }
-    }
-
-    public static void getTweets(ArrayList tweets) throws Exception {
+    public static void getTweets() throws Exception {
 
         //ArrayList<Tweet> tweets = new ArrayList<Tweet>();
 
