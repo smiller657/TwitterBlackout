@@ -150,9 +150,9 @@ public class NewsfeedGui extends javax.swing.JFrame {
     boolean t = true;
         while (t == true){
            String j = UserReturn.refresher();
-           UserReturn = /*what ever function access which user from the database
+//           UserReturn = /*what ever function access which user from the database
                    
-                   */
+//                   */
             
         }
     }

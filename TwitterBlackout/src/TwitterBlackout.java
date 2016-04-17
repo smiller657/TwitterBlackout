@@ -39,13 +39,12 @@ public class TwitterBlackout {
         this.subs = subscriptions;
 
         //first display the newsfeed.  GUI methods to launch window?
-        
         //loop through the tweets to display the current tweets to the guest user
         displayPublicTweets();
         //News Feed Menu options
         System.out.print("Type log, signup, post, search, profile, or close: ");
         Scanner in = new Scanner(System.in);
-        String input = in.next();
+        String input = in.next().toLowerCase();
         while (!input.equals("close")) {
             if (input.equals("signup")) { //sign up for an account
                 if (currentUser == null) {
@@ -165,13 +164,82 @@ public class TwitterBlackout {
                     System.out.println("No results.");
                 }
 
-            } else if (input.equals("profile")) { //on click of a hashtag, display all tweets with that hashtag
+            } else if (input.equals("profile")) { //Search for a Profile
+                System.out.print("Type the handle for the profile you wish to see: ");
+                String handle = in.next();
+                User userProfile = null;
+                for (User user : users) {
+                    if (user.getHandle().equals(handle)) {
+                        userProfile = user;
+                    }
+                }
+                if (userProfile == null) {
+                    System.out.println("User does not exist.");
+                } else if (userProfile.getUserId() == currentUser.getUserId()) { //User is looking at own profile
+                    System.out.println("First Name: " + userProfile.getFirstName());
+                    System.out.println("Last Name: " + userProfile.getLastName());
+                    System.out.println("Handle: " + userProfile.getHandle());
+                    System.out.println("Password: " + userProfile.getPassword());
+                    System.out.println("Public profile: " + userProfile.getIsPublic());
+                    System.out.print("Would you like to update your information? Type y or n: ");
+                    String ans = in.next();
+                    if (ans.equals("y")) { //update profile
+                        System.out.print("Enter your first name: ");
+                        String newFn = in.next();
+                        System.out.print("Enter your last name: ");
+                        String newLn = in.next();
+                        System.out.print("Enter your handle: ");
+                        String newHandle = in.next();
+                        //Check to see if handle is unique
+                        boolean isTaken = false;
+                        for (User user : users) {
+                            if (user.getHandle().equals(newHandle)) {
+                                isTaken = true;
+                            }
+                        }
+                        while (isTaken) {
+                            System.out.print("Handle is taken. Enter your handle: ");
+                            newHandle = in.next();
+                            for (User user : users) {
+                                if (user.getHandle().equals(newHandle)) {
+                                    isTaken = true;
+                                } else {
+                                    isTaken = false;
+                                }
+                            }
+                        }
+                        System.out.print("Enter your password: ");
+                        String newPassword = in.next();
+                        System.out.print("Type 'true' if your profile is public, otherwise type false: ");
+                        boolean newIsPublic = in.nextBoolean();
+                        //Update the user's profile
+                        //TODO: Add DB method
+                        for (User user : users) {
+                            if (user.getUserId() == currentUser.getUserId()) {
+                                user.setFirstName(newFn);
+                                user.setLastName(newLn);
+                                user.setHandle(newHandle);
+                                user.setPassword(newPassword);
+                                user.setIsPublic(newIsPublic);
+                                currentUser = user;
+                            }
+                        }
+                    }
+                } else { //User is looking at another user's profile
+                    if (userProfile.getIsPublic() || (currentUser != null && isSubscribed(userProfile.getUserId()))) {
+                        System.out.println("First Name: " + userProfile.getFirstName());
+                        System.out.println("Last Name: " + userProfile.getLastName());
+                        System.out.println("Handle: " + userProfile.getHandle());
+                    } else { //That user's profile is not public
+                        System.out.println("Handle: " + userProfile.getHandle());
+                    }
+                }
 
             } else {
                 System.out.println("Incorrect input.  Try again.");
             }
             System.out.print("Type log, signup, post, search, profile, or close: ");
-            input = in.next();
+            input = in.next().toLowerCase();
         }
     }
 

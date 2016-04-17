@@ -25,6 +25,7 @@ public class UserReturn {
     }
 
     public static String refresher() {
+        String j = "";
 //* will need data base consultation for this part
 /* get info from data table and pass it into list, also user data.
 

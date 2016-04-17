@@ -24,7 +24,7 @@ public class Database {
 
         String url = "jdbc:mysql://localhost:3306/twitterblackout";
         String user = "root";
-        String password = "CPSC240";
+        String password = "@ppl3s";
 
         Connection c = DriverManager.getConnection(url, user, password);
         return c;
@@ -159,7 +159,7 @@ public class Database {
 
                 // add info to tweets arraylist
                 Tweet t = new Tweet(tweetId, userId, phrase, isPublic, timestamp);
-                tweets.add(t);
+                //tweets.add(t);
 
             }
             
