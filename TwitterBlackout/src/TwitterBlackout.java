@@ -17,8 +17,9 @@ public class TwitterBlackout {
     private ArrayList<Subscription> subs;
 
     //TODO: local variables until db inacted
-    private int userAccountCounter = 2;
-    private int tweetAccountCounter = 4;
+    private int userAccountCounter = 3;
+    private int tweetAccountCounter = 6;
+    private int subCounter = 1;
 
     /**
      * Runs the Twitter Blackout Application, which interfaces the GUI and
@@ -81,7 +82,7 @@ public class TwitterBlackout {
                     User newUser = new User(userAccountCounter, fn, ln, handle, password, isPublic);
                     users.add(newUser); //TODO: will need db method
                     userAccountCounter++;
-                    System.out.println(newUser.toString());
+                    System.out.println("You have created an account!  Now go log in!");
                 } else {
                     System.out.println("You are already logged in.");
                 }
@@ -97,7 +98,7 @@ public class TwitterBlackout {
                         //log the user in
                         if (user.getHandle().equals(handle) && user.getPassword().equals(password)) {
                             currentUser = user;
-                            System.out.println("Welcome back " + handle + ". Your subscribed tweets: ");
+                            System.out.println("Welcome back " + handle + ".");
                             displayPrivateTweets();//Display subscribed only tweets
                             goodLogin = true;
                         }
@@ -108,7 +109,7 @@ public class TwitterBlackout {
                 } else { //log out
                     currentUser = null;
                     System.out.println("You have been logged out.");
-
+                    displayPublicTweets();
                 }
             } else if (input.equals("post")) { //if a user is logged in, create a post
                 if (currentUser != null) {
@@ -121,19 +122,24 @@ public class TwitterBlackout {
                     }
                     System.out.print("Type true if this tweet is public, otherwise type false: ");
                     boolean isPublic = in.nextBoolean();
-                    for (int i = 0; i < phrase.length(); i++) {
-                        if (phrase.charAt(i) == '@') {
-                            int endHandle = phrase.indexOf(" ", i);
-                            String handle = phrase.substring((i + 1), endHandle);
-                            for (User user : users) {
-                                if (user.getHandle().equals(handle)) {
-                                    phrase = phrase.substring(0, i) + user.getUserId() + phrase.substring(endHandle);
-                                }
+                    //Regex idea found at http://stackoverflow.com/questions/600733/using-java-to-find-substring-of-a-bigger-string-using-regular-expression
+                    Pattern pattern = Pattern.compile("@\\d+\\W");
+                    Matcher m = pattern.matcher(phrase);
+                    while (m.find()) {
+                        String fullHandle = m.group(); //@name.
+                        int start = phrase.indexOf(fullHandle);
+                        int fullHandleLength = fullHandle.length();
+                        int end = start + fullHandleLength - 1;
+                        String userHandle = fullHandle.substring(1, fullHandleLength - 1);
+                        for (User user : users) {
+                            if (user.getHandle().equals(userHandle)) {
+                                phrase = phrase.substring(0, start + 1) + user.getUserId() + phrase.substring(end);
                             }
                         }
                     }
                     //TODO: Remove if db generated
                     Tweet newTweet = new Tweet(tweetAccountCounter, currentUser.getUserId(), phrase, isPublic, SimpleDateFormatter.getTimestamp());
+                    tweetAccountCounter++;
                     tweets.add(newTweet);
                     displayPrivateTweets();
                 } else {
@@ -148,13 +154,16 @@ public class TwitterBlackout {
                 for (Tweet tweet : tweets) {
                     Tweet tempTweet = displayMessage(tweet);
                     if (tempTweet.getPhrase().contains(phrase)) {
-                        if ((currentUser != null) && tempTweet.getPhrase().contains("@" + currentUser.getHandle())) {
+                        if ((currentUser != null) && tempTweet.getPhrase().contains("@" + currentUser.getHandle())) { //if the tweet is a message to a current user
                             System.out.println(handleLookup(tempTweet.getUserId()) + " " + tempTweet.getPhrase() + " " + tweet.getTimestamp());
                             isFound = true;
-                        } else if (tempTweet.getIsPublic()) {
+                        } else if (tempTweet.getIsPublic()) { //if the tweet is public
                             System.out.println(handleLookup(tempTweet.getUserId()) + " " + tempTweet.getPhrase() + " " + tweet.getTimestamp());
                             isFound = true;
-                        } else if ((currentUser != null) && (isSubscribed(tempTweet.getUserId()))) {
+                        } else if ((currentUser != null) && (isSubscribed(tempTweet.getUserId()))) { //if user subscribes to another user.
+                            System.out.println(handleLookup(tempTweet.getUserId()) + " " + tempTweet.getPhrase() + " " + tweet.getTimestamp());
+                            isFound = true;
+                        } else if ((currentUser != null) && (tempTweet.getUserId() == currentUser.getUserId())) { //if the user has posted a tweet.
                             System.out.println(handleLookup(tempTweet.getUserId()) + " " + tempTweet.getPhrase() + " " + tweet.getTimestamp());
                             isFound = true;
                         }
@@ -175,14 +184,14 @@ public class TwitterBlackout {
                 }
                 if (userProfile == null) {
                     System.out.println("User does not exist.");
-                } else if (userProfile.getUserId() == currentUser.getUserId()) { //User is looking at own profile
+                } else if (currentUser != null && userProfile.getUserId() == currentUser.getUserId()) { //User is looking at own profile
                     System.out.println("First Name: " + userProfile.getFirstName());
                     System.out.println("Last Name: " + userProfile.getLastName());
                     System.out.println("Handle: " + userProfile.getHandle());
                     System.out.println("Password: " + userProfile.getPassword());
                     System.out.println("Public profile: " + userProfile.getIsPublic());
                     System.out.print("Would you like to update your information? Type y or n: ");
-                    String ans = in.next();
+                    String ans = in.next().toLowerCase();
                     if (ans.equals("y")) { //update profile
                         System.out.print("Enter your first name: ");
                         String newFn = in.next();
@@ -230,9 +239,37 @@ public class TwitterBlackout {
                         System.out.println("First Name: " + userProfile.getFirstName());
                         System.out.println("Last Name: " + userProfile.getLastName());
                         System.out.println("Handle: " + userProfile.getHandle());
+                        if (currentUser != null) {
+                            System.out.print("Would you like to unsubscribe to this user? Type y or n: ");
+                            String ans = in.next().toLowerCase();
+                            if (ans.equals("y") && currentUser != null) {
+                                //TODO: Will need a vastly different update for the db
+                                for (Subscription sub : subs) {
+                                    if (sub.getSubscriberId() == currentUser.getUserId() && sub.getSubscribeeId() == userProfile.getUserId()) {
+                                        subs.remove(sub);
+                                    }
+                                }
+                                subCounter--;
+                                System.out.println("Your are now unsubscribed to " + userProfile.getHandle() + ".");
+                            }
+                        }
                     } else { //That user's profile is not public
                         System.out.println("Handle: " + userProfile.getHandle());
+                        System.out.print("Would you like to subscribe to this user? Type y or n: ");
+                        String ans = in.next().toLowerCase();
+                        if (ans.equals("y") && currentUser != null) {
+                            Subscription newSub = new Subscription(subCounter, currentUser.getUserId(), userProfile.getUserId());
+                            subCounter++;
+                            System.out.println("Your are now subscribed to " + userProfile.getHandle() + ".");
+                        } else if (ans.equals("y") && currentUser == null) {
+                            System.out.println("Too bad. You're not logged in.");
+                        }
                     }
+                }
+                if (currentUser != null) {
+                    displayPrivateTweets();
+                } else {
+                    displayPublicTweets();
                 }
 
             } else {
@@ -247,6 +284,7 @@ public class TwitterBlackout {
      * Prints the public tweets.
      */
     private void displayPublicTweets() throws CloneNotSupportedException {
+        System.out.println("Your public tweets:");
         for (Tweet tweet : tweets) {
             if (tweet.getIsPublic()) {
                 if (tweet.getPhrase().contains("@")) {
@@ -268,22 +306,18 @@ public class TwitterBlackout {
      * @throws CloneNotSupportedException
      */
     private void displayPrivateTweets() throws CloneNotSupportedException {
+        System.out.println("Your subscribed only tweets:");
         if (currentUser != null) {
             int userId = currentUser.getUserId();
             for (Tweet tweet : tweets) {
                 if (tweet.getUserId() == currentUser.getUserId()) { //grab tweets this own user posts
                     Tweet tempTweet = displayMessage(tweet);
-                    System.out.println(handleLookup(tweet.getUserId()) + " " + tempTweet.getPhrase() + " " + tweet.getTimestamp() + " " + tweet.getTimestamp());
+                    System.out.println(handleLookup(tweet.getUserId()) + " " + tempTweet.getPhrase() + " " + tweet.getTimestamp());
                 } else if (tweet.getPhrase().contains("@" + currentUser.getUserId())) {//look for messages to the user, regardless of public/private
                     Tweet tempTweet = displayMessage(tweet);
-                    System.out.println(handleLookup(tweet.getUserId()) + " " + tempTweet.getPhrase() + " " + tweet.getTimestamp() + " " + tweet.getTimestamp());
-                } else if (!tweet.getIsPublic()) { //look for tweets that another user has post to whom this user subscribes.
-                    int tweeterId = tweet.getUserId();
-                    for (Subscription sub : subs) {
-                        if (sub.getSubscriberId() == tweeterId && sub.getSubscribeeId() == userId) {
-                            System.out.println(handleLookup(tweet.getUserId()) + " " + tweet.getPhrase() + " " + tweet.getTimestamp() + " " + tweet.getTimestamp());
-                        }
-                    }
+                    System.out.println(handleLookup(tweet.getUserId()) + " " + tempTweet.getPhrase() + " " + tweet.getTimestamp());
+                } else if (!tweet.getIsPublic() && isSubscribed(tweet.getUserId())) { //look for tweets that another user has post to whom this user subscribes.
+                    System.out.println(handleLookup(tweet.getUserId()) + " " + tweet.getPhrase() + " " + tweet.getTimestamp());
                 }
             }
         }
