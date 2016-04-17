@@ -174,6 +174,13 @@ public class Database {
 
     }
     
+    /**
+     * The getUser method draws a list of the users from the database and adds them 
+     * to an ArrayList in the program.
+     * 
+     * @param users the ArrayList of User objects
+     * @throws Exception if a connection is not made
+     */
     public static void getUser(ArrayList users) throws Exception {
         
         //ArrayList<User> users = new ArrayList<User>();

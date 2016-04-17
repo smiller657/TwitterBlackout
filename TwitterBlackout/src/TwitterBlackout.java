@@ -32,7 +32,7 @@ public class TwitterBlackout {
      * user follows another user, pulled from the database.
      * @throws java.lang.CloneNotSupportedException
      */
-    public void runApp(ArrayList<Tweet> tweets, ArrayList<User> users, ArrayList<Subscription> subscriptions) throws CloneNotSupportedException {
+    public void runApp(ArrayList<Tweet> tweets, ArrayList<User> users, ArrayList<Subscription> subscriptions) throws CloneNotSupportedException, Exception {
 
         //Generate arraylists from database?  Not sure if should be parameters.
         this.tweets = tweets;
@@ -55,6 +55,10 @@ public class TwitterBlackout {
                     String ln = in.next();
                     System.out.print("Enter your handle: ");
                     String handle = in.next();
+                    
+                    // Populate user list
+                    Database.getUser(users);
+                    
                     //Check to see if handle is unique
                     boolean isTaken = false;
                     for (User user : users) {
@@ -79,9 +83,10 @@ public class TwitterBlackout {
                     boolean isPublic = in.nextBoolean();
 
                     //Then create a new user's account
-                    User newUser = new User(userAccountCounter, fn, ln, handle, password, isPublic);
-                    users.add(newUser); //TODO: will need db method
-                    userAccountCounter++;
+                    User newUser = new User(0, fn, ln, handle, password, isPublic);
+                    Database.addUser(newUser); // Updated to database
+                    Database.getUser(users); // Update users list
+                    //userAccountCounter++;
                     System.out.println("You have created an account!  Now go log in!");
                 } else {
                     System.out.println("You are already logged in.");
@@ -138,9 +143,9 @@ public class TwitterBlackout {
                         }
                     }
                     //TODO: Remove if db generated
-                    Tweet newTweet = new Tweet(tweetAccountCounter, currentUser.getUserId(), phrase, isPublic, SimpleDateFormatter.getTimestamp());
-                    tweetAccountCounter++;
-                    tweets.add(newTweet);
+                    Tweet newTweet = new Tweet(0, currentUser.getUserId(), phrase, isPublic, SimpleDateFormatter.getTimestamp());
+                    //tweetAccountCounter++;
+                    Database.addTweet(newTweet);
                     displayPrivateTweets();
                 } else {
                     System.out.println("Only users who are logged in may post a tweet.");
