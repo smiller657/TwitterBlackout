@@ -18,7 +18,10 @@ public class TwitterBlackoutTester {
         ArrayList<User> users = new ArrayList<User>();
         ArrayList<Tweet> tweets = new ArrayList<Tweet>();
         ArrayList<Subscription> subs = new ArrayList<Subscription>();
-        User sm = new User(0, "Sam", "Miller", "swordgirl", "password", true);
+        
+        TwitterBlackout tb = new TwitterBlackout();
+        tb.runApp(tweets, users, subs);
+        /*User sm = new User(0, "Sam", "Miller", "swordgirl", "password", true);
         User pk = new User(1, "Paul", "Kartage", "rennman", "pass2", false);
         User mr = new User(2, "Mike", "Reynolds", "mrmr", "1234", true);
 //        //Testing code tools before db implementation: 
@@ -41,7 +44,7 @@ public class TwitterBlackoutTester {
         Subscription sub1 = new Subscription(100, 0, 1);  //Sam is the subscriber, Paul is the subscribee.
         subs.add(sub1);        
         TwitterBlackout tb = new TwitterBlackout();
-        tb.runApp(tweets, users, subs);
+        tb.runApp(tweets, users, subs);*/
         
         
         // test connection
@@ -65,7 +68,8 @@ public class TwitterBlackoutTester {
             iP = 1;
         else
             iP = 0; */
-        //User mr = new User(0, "Richard", "Starkey", "Ringo", "drums", false);
+        //User mr = new User(0, "Richard", "Starkey", "Ringo", "Beatles", true);
+        //Database.updateUser(mr, 4);
 //       Database.addUser(sm);
 //       Database.addUser(pk);     
 //       Database.addUser(mr);
@@ -78,10 +82,10 @@ public class TwitterBlackoutTester {
         //Tweet var = m1;
         //Database.addTweet(var);
         
-//       Database.getTweets(tweets);
-//       for (int i = 0; i < tweets.size(); i++) {
-//                System.out.println(((Tweet)tweets.get(i)).getTweetId() + ", " + ((Tweet)tweets.get(i)).getUserId() + ", " + ((Tweet)tweets.get(i)).getPhrase() + ", " + ((Tweet)tweets.get(i)).getIsPublic() + ", " + ((Tweet)tweets.get(i)).getTimestamp());
-//            }
+       //Database.getTweets(tweets);
+       //for (int i = 0; i < tweets.size(); i++) {
+       //         System.out.println(((Tweet)tweets.get(i)).getTweetId() + ", " + ((Tweet)tweets.get(i)).getUserId() + ", " + ((Tweet)tweets.get(i)).getPhrase() + ", " + ((Tweet)tweets.get(i)).getIsPublic() + ", " + ((Tweet)tweets.get(i)).getTimestamp());
+        //    }
         //String h = "mrmr";
         //String password = Database.getPassword(h);
         //System.out.println(password);

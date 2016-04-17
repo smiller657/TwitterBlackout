@@ -35,12 +35,18 @@ public class TwitterBlackout {
     public void runApp(ArrayList<Tweet> tweets, ArrayList<User> users, ArrayList<Subscription> subscriptions) throws CloneNotSupportedException, Exception {
 
         //Generate arraylists from database?  Not sure if should be parameters.
+        Database.getTweets(tweets);
+        Database.getUser(users);
+        Database.getSubscriptions(subscriptions);
         this.tweets = tweets;
         this.users = users;
         this.subs = subscriptions;
 
         //first display the newsfeed.  GUI methods to launch window?
         //loop through the tweets to display the current tweets to the guest user
+        //Database.getTweets(tweets);
+        //Database.getUser(users);
+        //Database.getSubscriptions(subscriptions);
         displayPublicTweets();
         //News Feed Menu options
         System.out.print("Type log, signup, post, search, profile, or close: ");
@@ -146,6 +152,7 @@ public class TwitterBlackout {
                     Tweet newTweet = new Tweet(0, currentUser.getUserId(), phrase, isPublic, SimpleDateFormatter.getTimestamp());
                     //tweetAccountCounter++;
                     Database.addTweet(newTweet);
+                    Database.getTweets(tweets);
                     displayPrivateTweets();
                 } else {
                     System.out.println("Only users who are logged in may post a tweet.");
@@ -236,6 +243,7 @@ public class TwitterBlackout {
                                 user.setPassword(newPassword);
                                 user.setIsPublic(newIsPublic);
                                 currentUser = user;
+                                Database.updateUser(currentUser, currentUser.getUserId());
                             }
                         }
                     }
@@ -251,10 +259,11 @@ public class TwitterBlackout {
                                 //TODO: Will need a vastly different update for the db
                                 for (Subscription sub : subs) {
                                     if (sub.getSubscriberId() == currentUser.getUserId() && sub.getSubscribeeId() == userProfile.getUserId()) {
-                                        subs.remove(sub);
+                                        //subs.remove(sub);
+                                        Database.deleteSubscription(sub.getSubscriptionId());
                                     }
                                 }
-                                subCounter--;
+                                //subCounter--;
                                 System.out.println("Your are now unsubscribed to " + userProfile.getHandle() + ".");
                             }
                         }
@@ -263,8 +272,9 @@ public class TwitterBlackout {
                         System.out.print("Would you like to subscribe to this user? Type y or n: ");
                         String ans = in.next().toLowerCase();
                         if (ans.equals("y") && currentUser != null) {
-                            Subscription newSub = new Subscription(subCounter, currentUser.getUserId(), userProfile.getUserId());
-                            subCounter++;
+                            Subscription newSub = new Subscription(0, currentUser.getUserId(), userProfile.getUserId());
+                            //subCounter++;
+                            Database.addSubscription(newSub);
                             System.out.println("Your are now subscribed to " + userProfile.getHandle() + ".");
                         } else if (ans.equals("y") && currentUser == null) {
                             System.out.println("Too bad. You're not logged in.");

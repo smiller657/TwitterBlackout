@@ -24,7 +24,7 @@ public class Database {
 
         String url = "jdbc:mysql://localhost:3306/twitterblackout";
         String user = "root";
-        String password = "@ppl3s";
+        String password = "CPSC240";
 
         Connection c = DriverManager.getConnection(url, user, password);
         return c;
@@ -65,6 +65,40 @@ public class Database {
         }
     }
 
+    public static void updateUser(User var, int uId) throws Exception {
+
+        //int uId = var.getUserId();
+        String fN = var.getFirstName();
+        String lN = var.getLastName();
+        String h = var.getHandle();
+        String pw = var.getPassword();
+        boolean iiP = var.getIsPublic();
+        int iP;
+        if (iiP) {
+            iP = 1;
+        } else {
+            iP = 0;
+        }
+
+        Connection c = null;
+        PreparedStatement posted = null;
+        try {
+            c = getConnection();
+            posted = c.prepareStatement("UPDATE user SET firstName = ?, lastName = ?, handle = ?, password = ?, isPublic = ? WHERE userID = ?");
+            //posted.setInt(1, uId);
+            posted.setString(1, fN);
+            posted.setString(2, lN);
+            posted.setString(3, h);
+            posted.setString(4, pw);
+            posted.setInt(5, iP);
+            posted.setInt(6, uId);
+            posted.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e);
+        } finally {
+            System.out.println("Insert Completed.");
+        }
+    }
     /**
      * The addTweet class adds tweets to the tweet table in the MySQL database.
      *
@@ -129,7 +163,22 @@ public class Database {
         }
     }
 
-    public static void getTweets() throws Exception {
+    public static void deleteSubscription(int subId) throws Exception {
+
+        Connection c = null;
+        PreparedStatement posted = null;
+        try {
+            c = getConnection();
+            posted = c.prepareStatement("DELETE FROM subscriptions Where subscriptionId = ?");
+            posted.setInt(1, subId);
+            posted.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e);
+        } finally {
+            System.out.println("Insert Completed.");
+        }
+    }
+    public static void getTweets(ArrayList tweets) throws Exception {
 
         //ArrayList<Tweet> tweets = new ArrayList<Tweet>();
 
@@ -159,7 +208,7 @@ public class Database {
 
                 // add info to tweets arraylist
                 Tweet t = new Tweet(tweetId, userId, phrase, isPublic, timestamp);
-                //tweets.add(t);
+                tweets.add(t);
 
             }
             
@@ -226,5 +275,40 @@ public class Database {
         }
     }
     
+    public static void getSubscriptions(ArrayList subscriptions) throws Exception {
+        
+        //ArrayList<User> users = new ArrayList<User>();
+        
+        Connection c = null;
+
+        try {
+            c = getConnection();
+
+            //  SELECT query
+            String query = "SELECT * from subscriptions";
+            Statement st = c.createStatement();
+            ResultSet result = st.executeQuery(query);
+
+            // iterate through the query
+            while (result.next()) {
+                int subscriptionId = result.getInt("subscriptionId");
+                int subscriberId = result.getInt("subscriberId");
+                int subscribeeId = result.getInt("subscribeeId");
+
+                // add info to users arraylist
+                Subscription s = new Subscription(subscriptionId, subscriberId, subscribeeId);
+                subscriptions.add(s);
+
+            }
+            
+            //for (int i = 0; i < users.size(); i++) {
+           //     System.out.println(((User)users.get(i)).getUserId() + ", " + ((User)users.get(i)).getFirstName() + ", " + ((User)users.get(i)).getLastName() + ", " + ((User)users.get(i)).getHandle() + ", " + ((User)users.get(i)).getPassword() + ", " + ((User)users.get(i)).getIsPublic());
+            //}
+
+            st.close();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
     
 }
