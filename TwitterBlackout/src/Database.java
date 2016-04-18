@@ -6,7 +6,7 @@ import java.util.*;
  * The Database class contains the scripts used to connect the TwitterBlackout
  * program with the database.
  *
- * @author mrey4_000
+ * @author Mike
  */
 public class Database {
 
@@ -39,6 +39,9 @@ public class Database {
      */
     public static void addUser(User var) throws Exception {
 
+        //  I used the textbook "A Guide to SQL" by Phillip J. Pratt and Mary Z. Last,
+        //  Course Technology, Boston, MA, 2009, for ideas on writing the database scripts.
+        
         int uId = var.getUserId();
         String fN = var.getFirstName();
         String lN = var.getLastName();
@@ -65,6 +68,13 @@ public class Database {
         }
     }
 
+    /**
+     * The updateUser class allows a user to update fields of their user profile.
+     * 
+     * @param var a User object
+     * @param uId a userId integer
+     * @throws Exception if there is no connection
+     */
     public static void updateUser(User var, int uId) throws Exception {
 
         //int uId = var.getUserId();
@@ -163,6 +173,13 @@ public class Database {
         }
     }
 
+    /**
+     * The deleteSubscription class will delete a row from the subscription
+     * table in the database.
+     * 
+     * @param subId a subscriptionId integer
+     * @throws Exception if there is no connection
+     */
     public static void deleteSubscription(int subId) throws Exception {
 
         Connection c = null;
@@ -178,9 +195,14 @@ public class Database {
             System.out.println("Insert Completed.");
         }
     }
+    
+    /**
+     * The getTweets class populates the tweets ArrayList in the program.
+     * 
+     * @param tweets an ArrayList of Tweet objects
+     * @throws Exception if there is no connection
+     */
     public static void getTweets(ArrayList tweets) throws Exception {
-
-        //ArrayList<Tweet> tweets = new ArrayList<Tweet>();
 
         Connection c = null;
 
@@ -212,10 +234,6 @@ public class Database {
 
             }
             
-            //for (int i = 0; i < tweets.size(); i++) {
-              //  System.out.println(((Tweet)tweets.get(i)).getTweetId() + ", " + ((Tweet)tweets.get(i)).getUserId() + ", " + ((Tweet)tweets.get(i)).getPhrase() + ", " + ((Tweet)tweets.get(i)).getIsPublic() + ", " + ((Tweet)tweets.get(i)).getTimestamp());
-            //}
-
             st.close();
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -231,8 +249,6 @@ public class Database {
      * @throws Exception if a connection is not made
      */
     public static void getUser(ArrayList users) throws Exception {
-        
-        //ArrayList<User> users = new ArrayList<User>();
         
         Connection c = null;
 
@@ -265,19 +281,20 @@ public class Database {
 
             }
             
-            //for (int i = 0; i < users.size(); i++) {
-           //     System.out.println(((User)users.get(i)).getUserId() + ", " + ((User)users.get(i)).getFirstName() + ", " + ((User)users.get(i)).getLastName() + ", " + ((User)users.get(i)).getHandle() + ", " + ((User)users.get(i)).getPassword() + ", " + ((User)users.get(i)).getIsPublic());
-            //}
-
             st.close();
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
     
+    /**
+     * The getSubscriptions class populates the subscriptions ArrayList in the
+     * program.
+     * 
+     * @param subscriptions an ArrayList of Subscription objects
+     * @throws Exception 
+     */
     public static void getSubscriptions(ArrayList subscriptions) throws Exception {
-        
-        //ArrayList<User> users = new ArrayList<User>();
         
         Connection c = null;
 
@@ -301,10 +318,6 @@ public class Database {
 
             }
             
-            //for (int i = 0; i < users.size(); i++) {
-           //     System.out.println(((User)users.get(i)).getUserId() + ", " + ((User)users.get(i)).getFirstName() + ", " + ((User)users.get(i)).getLastName() + ", " + ((User)users.get(i)).getHandle() + ", " + ((User)users.get(i)).getPassword() + ", " + ((User)users.get(i)).getIsPublic());
-            //}
-
             st.close();
         } catch (Exception e) {
             System.err.println(e.getMessage());
